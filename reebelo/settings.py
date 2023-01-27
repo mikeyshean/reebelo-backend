@@ -51,7 +51,9 @@ INSTALLED_APPS = [
     "rest_framework",
     "rest_framework.authtoken",
     "corsheaders",
-    "reebelo"
+    "reebelo",
+    "reebelo.core",
+    "reebelo.products"
 ]
 
 MIDDLEWARE = [
