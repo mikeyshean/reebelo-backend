@@ -53,7 +53,7 @@ INSTALLED_APPS = [
     "corsheaders",
     "reebelo",
     "reebelo.core",
-    "reebelo.products"
+    "reebelo.products",
 ]
 
 MIDDLEWARE = [
@@ -150,7 +150,7 @@ REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework.authentication.TokenAuthentication",
     ],
-    "EXCEPTION_HANDLER": "reebelo.error_handling.api_exception_handler",
+    "EXCEPTION_HANDLER": "reebelo.core.error_handling.api_exception_handler",
 }
 
 

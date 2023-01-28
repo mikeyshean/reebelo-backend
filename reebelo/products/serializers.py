@@ -15,11 +15,20 @@ class CreateProductSerializer(serializers.ModelSerializer):
         fields = ("name", "price", "quantity")
 
 
-class UpdateProductSerializer(serializers.ModelSerializer):
+class UpdateProductSerializer(serializers.Serializer):
     name = serializers.CharField(max_length=128)
     price = serializers.DecimalField(decimal_places=2, max_digits=8)
-    reduce_quantity = serializers.IntegerField()
+    decrease_quantity = serializers.IntegerField()
     increase_quantity = serializers.IntegerField()
 
-    class Meta:
-        fields = ("name", "price", "reduce_quantity", "increase_quantity")
+    def validate(self, data):
+        """
+        Validation of decrease_quantity and end increase_quantity.
+        """
+
+        if data.get("decrease_quantity") and data.get("increase_quantity"):
+            raise serializers.ValidationError(
+                "Either increase or decrease quanitity, not both."
+            )
+
+        return data
