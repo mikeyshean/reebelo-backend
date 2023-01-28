@@ -16,7 +16,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 
+from .views import RootView
+
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path("", RootView.as_view()),
     path("api/", include(("reebelo.core.api", "reebelo.core"), namespace="api")),
 ]
