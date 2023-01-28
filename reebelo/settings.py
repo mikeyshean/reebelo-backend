@@ -34,7 +34,7 @@ get_env = env.get_value if is_local else os.getenv
 SECRET_KEY = get_env("DJANGO_SECRET")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ["*"]
 
