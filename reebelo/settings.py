@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
+    "whitenoise.runserver_nostatic",
     "django.contrib.staticfiles",
     "rest_framework",
     "rest_framework.authtoken",
@@ -58,6 +59,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "corsheaders.middleware.CorsMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -139,6 +141,8 @@ USE_TZ = True
 
 STATIC_URL = "static/"
 
+STATIC_ROOT = BASE_DIR / "staticfiles"
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
@@ -156,7 +160,7 @@ REST_FRAMEWORK = {
 
 CORS_ALLOWED_ORIGINS = ["http://localhost:3000", "https://reebelo-web.vercel.app"]
 
-CSRF_TRUSTED_ORIGINS = ["https://nawar.click"]
+CSRF_TRUSTED_ORIGINS = ["https://reebelo.apimapper.dev"]
 
 LOGGING = {
     "version": 1,

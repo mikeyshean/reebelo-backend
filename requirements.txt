@@ -41,3 +41,5 @@ sqlparse==0.4.3
     #   django
 text-unidecode==1.2
     # via faker
+whitenoise==6.3.0
+    # via -r requirements.in
