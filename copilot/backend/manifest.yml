@@ -1,9 +1,9 @@
-# The manifest for the "reebelo" service.
+# The manifest for the "backend" service.
 # Read the full specification for the "Load Balanced Web Service" type at:
 #  https://aws.github.io/copilot-cli/docs/manifest/lb-web-service/
 
 # Your service name will be used in naming your resources like log groups, ECS services, etc.
-name: reebelo
+name: backend
 type: Load Balanced Web Service
 
 # Distribute traffic to your service.
@@ -46,3 +46,18 @@ network:
 #    count: 2               # Number of tasks to run for the "test" environment.
 #    deployment:            # The deployment strategy for the "test" environment.
 #       rolling: 'recreate' # Stops existing tasks before new ones are started for faster deployments.
+environments:
+  test:
+    secrets:
+      DJANGO_SECRET:
+        secretsmanager: 'reebelo/test/django:secret_key::'
+      POSTGRES_USER: 
+        secretsmanager: 'reebelo/test/postgres:user::'
+      POSTGRES_PASSWORD:
+        secretsmanager: 'reebelo/test/postgres:password::'
+      POSTGRES_HOST:
+        secretsmanager: 'reebelo/test/postgres:host::'
+      POSTGRES_PORT: 
+        secretsmanager: 'reebelo/test/postgres:port::'
+      POSTGRES_DB:
+        secretsmanager: 'reebelo/test/postgres:db::'
