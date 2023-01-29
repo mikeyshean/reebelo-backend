@@ -20,8 +20,8 @@ class ProductViewSet(ViewSet):
             data = serializer.validated_data
             product = ProductService.create(
                 name=data["name"],
-                category_id=data["category_id"],
-                domain=data["domain"],
+                quantity=data["quantity"],
+                price=data["price"],
             )
             response_serializer = ProductSerializer(product)
             return Response(response_serializer.data)

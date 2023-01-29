@@ -14,8 +14,8 @@ class ProductService:
     QUANTITY_FIELDS = {"increase_quantity", "decrease_quantity"}
 
     @staticmethod
-    def create(name: str, price: float, quanitity: int):
-        return Product.objects.create(name=name, price=price, quanitity=quanitity)
+    def create(name: str, price: float, quantity: int):
+        return Product.objects.create(name=name, price=price, quantity=quantity)
 
     @staticmethod
     def list():
