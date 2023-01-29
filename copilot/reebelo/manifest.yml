@@ -46,3 +46,18 @@ network:
 #    count: 2               # Number of tasks to run for the "test" environment.
 #    deployment:            # The deployment strategy for the "test" environment.
 #       rolling: 'recreate' # Stops existing tasks before new ones are started for faster deployments.
+environments:
+  test:
+    secrets:
+      DJANGO_SECRET:
+        secretsmanager: 'reebelo/test/django:secret_key::'
+      POSTGRES_USER: 
+        secretsmanager: 'reebelo/test/postgres:user::'
+      POSTGRES_PASSWORD:
+        secretsmanager: 'reebelo/test/postgres:password::'
+      POSTGRES_HOST:
+        secretsmanager: 'reebelo/test/postgres:host::'
+      POSTGRES_PORT: 
+        secretsmanager: 'reebelo/test/postgres:port::'
+      POSTGRES_DB:
+        secretsmanager: 'reebelo/test/postgres:db::'
