@@ -3,6 +3,8 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
 from rest_framework.viewsets import ViewSet
 
+from reebelo.core.exceptions import NotFoundError
+
 from .serializers import (
     CreateProductSerializer,
     ProductSerializer,
@@ -51,3 +53,10 @@ class ProductViewSet(ViewSet):
             for k, v in e.detail.items():
                 errors[k] = map(lambda detail: detail.title(), v)
             return Response(errors, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
+
+    def delete(self, request, pk: int):
+        try:
+            ProductService.delete(pk)
+            return Response(status=status.HTTP_200_OK)
+        except NotFoundError:
+            return Response(status=status.HTTP_404_NOT_FOUND)

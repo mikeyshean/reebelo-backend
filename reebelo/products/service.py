@@ -33,6 +33,13 @@ class ProductService:
         return product
 
     @staticmethod
+    def delete(id: str):
+        try:
+            Product.objects.get(id=id).delete()
+        except Product.DoesNotExist:
+            raise NotFoundError()
+
+    @staticmethod
     def _update_fields(product: Product, update_fields, **kwargs):
         """
         Updates fields directly by requested field name strs
