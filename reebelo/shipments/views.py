@@ -23,6 +23,14 @@ class TrackingCompanyViewSet(ViewSet):
 
 
 class ShipmentViewSet(ViewSet):
+    def retrieve(self, request, pk):
+        shipment = ShipmentService.get_by_order_id(order_id=pk)
+        if not shipment:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        serializer = ShipmentSerializer(shipment)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
     def update(self, request, pk):
         """
         Creates or replaces order's shipment details

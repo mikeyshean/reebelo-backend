@@ -1,14 +1,11 @@
 import logging
-from dataclasses import asdict
 
 from rest_framework import status
-from rest_framework.decorators import action
 from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
 from rest_framework.viewsets import ViewSet
 
 from reebelo.core.exceptions import NotFoundError
-from reebelo.shipments.api import ShipmentApi
 
 from .serializers import CreateOrderSerializer, OrderSerializer
 from .service import OrderService
@@ -61,18 +58,5 @@ class OrderViewSet(ViewSet):
         try:
             OrderService.delete(id=pk)
             return Response(status=status.HTTP_200_OK)
-        except NotFoundError:
-            return Response(status=status.HTTP_404_NOT_FOUND)
-
-    @action(detail=True, methods=["get"], url_path="shipments")
-    def get_order_shipment(self, request, pk):
-        try:
-            shipmentDto = ShipmentApi.get_by_order_id(orderId=pk)
-            return Response(asdict(shipmentDto), status=status.HTTP_200_OK)
-        except ValidationError as e:
-            errors = {}
-            for k, v in e.detail.items():
-                errors[k] = map(lambda detail: detail.title(), v)
-            return Response(errors, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
         except NotFoundError:
             return Response(status=status.HTTP_404_NOT_FOUND)
