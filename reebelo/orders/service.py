@@ -21,15 +21,20 @@ class OrderService:
         if not result.success:
             return result
 
+        productDto = result.data
         order = Order.objects.create(
-            product_id=product_id, quantity=quantity, status=Order.PROCESSING
+            product_id=product_id,
+            quantity=quantity,
+            status=Order.PROCESSING,
+            amount_per_unit=productDto.price,
+            amount_total=(productDto.price * quantity),
         )
         result.data = order
         return result
 
     @staticmethod
     def list():
-        return Order.objects.all().order_by("name")
+        return Order.objects.all().select_related("product").order_by("-created")
 
     @staticmethod
     def delete(id: str):

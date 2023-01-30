@@ -33,3 +33,9 @@ class Order(TimestampedModel):
         help_text="Product associated with order",
     )
     quantity = models.IntegerField(null=False, blank=False, default=0)
+    amount_per_unit = models.DecimalField(
+        null=False, blank=False, decimal_places=2, max_digits=8, default=0.00
+    )
+    amount_total = models.DecimalField(
+        null=False, blank=False, decimal_places=2, max_digits=8, default=0.00
+    )
