@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ViewSet
 
 from reebelo.core.exceptions import NotFoundError
+from reebelo.products.exceptions import InsufficientQuantity
 
 from .serializers import (
     CreateProductSerializer,
@@ -11,6 +12,8 @@ from .serializers import (
     UpdateProductSerializer,
 )
 from .service import ProductService
+
+ERROR_CODE_INSUFFICIENT_QUANTITY = "insufficient_quantity"
 
 
 class ProductViewSet(ViewSet):
@@ -53,6 +56,9 @@ class ProductViewSet(ViewSet):
             for k, v in e.detail.items():
                 errors[k] = map(lambda detail: detail.title(), v)
             return Response(errors, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
+        except InsufficientQuantity as e:
+            error = {"error_code": e.error.code, "message": e.error.message}
+            return Response(error, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
 
     def delete(self, request, pk: int):
         try:

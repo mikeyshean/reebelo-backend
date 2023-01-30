@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     "reebelo",
     "reebelo.core",
     "reebelo.products",
+    "reebelo.orders",
 ]
 
 MIDDLEWARE = [

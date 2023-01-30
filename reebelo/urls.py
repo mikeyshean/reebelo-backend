@@ -21,5 +21,5 @@ from .views import RootView
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("", RootView.as_view()),
-    path("api/", include(("reebelo.core.api", "reebelo.core"), namespace="api")),
+    path("api/", include(("reebelo.core.api.urls", "reebelo.core"), namespace="api")),
 ]

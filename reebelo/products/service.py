@@ -3,6 +3,7 @@ import logging
 from django.db import transaction
 
 from reebelo.core.exceptions import NotFoundError
+from reebelo.products.exceptions import InsufficientQuantity
 
 from .models import Product
 
@@ -89,6 +90,8 @@ class ProductService:
             return product.quantity + value
 
         if action == "decrease_quantity":
+            if product.quantity - value < 0:
+                raise InsufficientQuantity()
             return max(product.quantity - value, 0)
 
     @staticmethod

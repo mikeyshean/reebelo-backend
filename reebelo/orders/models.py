@@ -32,3 +32,4 @@ class Order(TimestampedModel):
         blank=False,
         help_text="Product associated with order",
     )
+    quantity = models.IntegerField(null=False, blank=False, default=0)
