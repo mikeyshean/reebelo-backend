@@ -13,25 +13,26 @@ class TrackingCompany(TimestampedModel):
         null=True,
         blank=False,
         default=None,
+        unique=True,
     )
 
 
 class Shipment(TimestampedModel):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    tracking_number = models.CharField(
-        max_length=128,
-        help_text="Tracking number for order",
-        null=True,
-        blank=False,
-        default=None,
-    )
-    order = models.ForeignKey(
+    order = models.OneToOneField(
         "orders.Order",
         on_delete=models.CASCADE,
         related_name="order",
         null=False,
         blank=False,
         help_text="Order associated with shipment",
+        primary_key=True,
+    )
+    tracking_number = models.CharField(
+        max_length=128,
+        help_text="Tracking number for order",
+        null=True,
+        blank=False,
+        default=None,
     )
     tracking_company = models.ForeignKey(
         "TrackingCompany",

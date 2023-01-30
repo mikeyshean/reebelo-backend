@@ -24,7 +24,7 @@ class OrderService:
 
         productDto = result.data
         order = Order.objects.create(
-            product_id=product_id,
+            product_id=productDto.id,
             quantity=quantity,
             status=Order.PROCESSING,
             amount_per_unit=productDto.price,

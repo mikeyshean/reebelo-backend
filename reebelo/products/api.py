@@ -13,7 +13,10 @@ class ProductApi:
             return Result(
                 success=True,
                 data=ProductDto(
-                    name=product.name, price=product.price, quantity=product.quantity
+                    id=product.id,
+                    name=product.name,
+                    price=product.price,
+                    quantity=product.quantity,
                 ),
             )
         except InsufficientQuantity as e:
