@@ -27,9 +27,3 @@ class OrderSerializer(serializers.ModelSerializer):
 class CreateOrderSerializer(serializers.Serializer):
     product_id = serializers.CharField()
     quantity = serializers.IntegerField()
-
-
-class UpdateOrderShipmentSerializer(serializers.Serializer):
-    recipient_name = serializers.CharField(max_length=128)
-    tracking_company_id = serializers.CharField()
-    tracking_number = serializers.CharField(max_length=128)

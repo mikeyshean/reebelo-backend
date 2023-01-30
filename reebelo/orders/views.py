@@ -10,11 +10,7 @@ from rest_framework.viewsets import ViewSet
 from reebelo.core.exceptions import NotFoundError
 from reebelo.shipments.api import ShipmentApi
 
-from .serializers import (
-    CreateOrderSerializer,
-    OrderSerializer,
-    UpdateOrderShipmentSerializer,
-)
+from .serializers import CreateOrderSerializer, OrderSerializer
 from .service import OrderService
 
 logger = logging.getLogger(__name__)
@@ -68,28 +64,7 @@ class OrderViewSet(ViewSet):
         except NotFoundError:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
-    @action(detail=True, methods=["put", "get"], url_path="shipments")
-    def order_shipment(self, request, pk):
-        if request.method == "PUT":
-            return self.upsert_order_shipment(request, pk)
-
-        if request.method == "GET":
-            return self.get_order_shipment(request, pk)
-
-    def upsert_order_shipment(self, request, pk):
-        try:
-            serializer = UpdateOrderShipmentSerializer(data=request.data)
-            serializer.is_valid(raise_exception=True)
-
-            data = serializer.validated_data
-            shipmentDto = ShipmentApi.upsert(orderId=pk, **data)
-            return Response(asdict(shipmentDto), status=status.HTTP_200_OK)
-        except ValidationError as e:
-            errors = {}
-            for k, v in e.detail.items():
-                errors[k] = map(lambda detail: detail.title(), v)
-            return Response(errors, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
-
+    @action(detail=True, methods=["get"], url_path="shipments")
     def get_order_shipment(self, request, pk):
         try:
             shipmentDto = ShipmentApi.get_by_order_id(orderId=pk)
