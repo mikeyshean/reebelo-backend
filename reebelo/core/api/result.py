@@ -5,7 +5,7 @@ from typing import Any, Optional
 
 class ErrorCode(str, Enum):
     INSUFFICIENT_QUANTITY = "insufficient_quantity"
-    UNIQUE_OR_REQUIRED_FIELD = "unique_or_required_field"
+    UNIQUE_OR_REQUIRED_FIELD = "unique_or_required"
 
 
 @dataclass
