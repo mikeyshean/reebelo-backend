@@ -1,4 +1,5 @@
 import logging
+from typing import Optional
 
 from django.db import transaction
 
@@ -35,6 +36,10 @@ class OrderService:
     @staticmethod
     def list():
         return Order.objects.all().select_related("product").order_by("-created")
+
+    @staticmethod
+    def get_by_id(id: str) -> Optional[Order]:
+        return Order.objects.filter(id=id).first()
 
     @staticmethod
     def delete(id: str):

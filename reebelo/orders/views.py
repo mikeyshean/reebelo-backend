@@ -46,8 +46,13 @@ class OrderViewSet(ViewSet):
         serializer = OrderSerializer(products, many=True)
         return Response(serializer.data)
 
-    def partial_update(self, request, pk=None):
-        return Response(status=status.HTTP_200_OK)
+    def retrieve(self, request, pk):
+        order = OrderService.get_by_id(id=pk)
+        if not order:
+            return Response("Order not found", status=status.HTTP_404_NOT_FOUND)
+
+        serializer = OrderSerializer(order)
+        return Response(serializer.data)
 
     def delete(self, request, pk: int):
         try:
