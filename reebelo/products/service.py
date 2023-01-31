@@ -19,8 +19,8 @@ class ProductService:
         return Product.objects.create(name=name, price=price, quantity=quantity)
 
     @staticmethod
-    def list():
-        return Product.objects.all().order_by("name")
+    def list(search: str):
+        return Product.objects.filter(name__search=search).order_by("name")
 
     @staticmethod
     @transaction.atomic

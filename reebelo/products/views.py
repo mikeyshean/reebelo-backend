@@ -1,3 +1,4 @@
+import urllib.parse
 from collections import namedtuple
 
 from rest_framework import status
@@ -25,13 +26,16 @@ class CursorSetPagination(CursorPagination):
     ordering = "name"
 
     def get_paginated_response(self, data):
-        next_cursor = self.get_next_link()
+        next_link = self.get_next_link()
+        parsed = urllib.parse.urlparse(next_link)
+        query_params = urllib.parse.parse_qs(parsed.query)
+        next_cursor = query_params.get("cursor", [None])[0]
 
         return Response(
             {
-                "next": next_cursor,
+                "next": next_link,
                 "previous": self.get_previous_link(),
-                "next_cursor": next_cursor.split("cursor=")[1] if next_cursor else None,
+                "next_cursor": next_cursor,
                 "results": data,
             }
         )
@@ -61,7 +65,9 @@ class ProductViewSet(CursorSetPagination, ViewSet):
             return Response(errors, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
 
     def list(self, request):
-        queryset = ProductService.list()
+        params = request.query_params
+        search = params.get("search", "")
+        queryset = ProductService.list(search=search)
         page = self.paginate_queryset(queryset=queryset, request=request)
         if page is not None:
             serializer = ProductSerializer(page, many=True)
