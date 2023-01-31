@@ -10,9 +10,8 @@ class TrackingCompanySerializer(serializers.ModelSerializer):
 
 
 class UpsertShipmentSerializer(serializers.Serializer):
-    recipient_name = serializers.CharField(max_length=128)
     tracking_company_id = serializers.CharField()
-    tracking_number = serializers.CharField(max_length=128)
+    tracking_number = serializers.CharField(max_length=128, allow_null=True)
 
 
 class ShipmentSerializer(serializers.ModelSerializer):
@@ -20,4 +19,4 @@ class ShipmentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Shipment
-        fields = ("order_id", "recipient_name", "tracking_number", "tracking_company")
+        fields = ("order_id", "tracking_number", "tracking_company")

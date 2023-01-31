@@ -8,7 +8,6 @@ logger = logging.getLogger(__name__)
 
 class ShipmentService:
     UPDATABLE_FIELDS = {
-        "recipient_name",
         "tracking_number",
         "tracking_company_id",
         "order_id",

@@ -31,7 +31,7 @@ class Shipment(TimestampedModel):
         max_length=128,
         help_text="Tracking number for order",
         null=True,
-        blank=False,
+        blank=True,
         default=None,
     )
     tracking_company = models.ForeignKey(
@@ -42,11 +42,4 @@ class Shipment(TimestampedModel):
         blank=False,
         default=None,
         help_text="Tracking company associated with shipment",
-    )
-    recipient_name = models.CharField(
-        max_length=128,
-        help_text="Full name of order recipient",
-        null=True,
-        blank=False,
-        default=None,
     )
