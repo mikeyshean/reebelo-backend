@@ -7,13 +7,15 @@ from rest_framework.viewsets import ViewSet
 
 from reebelo.core.exceptions import NotFoundError
 
-from .serializers import CreateOrderSerializer, OrderSerializer
+from .serializers import CreateOrderSerializer, OrderSerializer, UpdateOrderSerializer
 from .service import OrderService
 
 logger = logging.getLogger(__name__)
 
 
 class OrderViewSet(ViewSet):
+    UPDATABLE_FIELDS = {"status"}
+
     def create(self, request):
         try:
             serializer = CreateOrderSerializer(data=request.data)
@@ -53,6 +55,21 @@ class OrderViewSet(ViewSet):
 
         serializer = OrderSerializer(order)
         return Response(serializer.data)
+
+    def partial_update(self, request, pk=None):
+        try:
+            serializer = UpdateOrderSerializer(data=request.data, partial=True)
+            serializer.is_valid(raise_exception=True)
+
+            data = serializer.validated_data
+            product = OrderService.update(id=pk, **data)
+            response_serializer = OrderSerializer(product)
+            return Response(response_serializer.data)
+        except ValidationError as e:
+            errors = {}
+            for k, v in e.detail.items():
+                errors[k] = map(lambda detail: detail.title(), v)
+            return Response(errors, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
 
     def delete(self, request, pk: str):
         try:

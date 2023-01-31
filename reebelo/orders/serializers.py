@@ -38,3 +38,7 @@ class OrderSerializer(serializers.ModelSerializer):
 class CreateOrderSerializer(serializers.Serializer):
     product_id = serializers.CharField()
     quantity = serializers.IntegerField()
+
+
+class UpdateOrderSerializer(serializers.Serializer):
+    status = serializers.ChoiceField(choices=Order.STATUS_CHOICES)

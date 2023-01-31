@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 
 
 class OrderService:
-    UPDATABLE_FIELDS = {"status", "product"}
+    UPDATABLE_FIELDS = {"status"}
 
     @staticmethod
     @transaction.atomic
@@ -46,6 +46,22 @@ class OrderService:
     @staticmethod
     def get_by_id(id: str) -> Optional[Order]:
         return Order.objects.filter(id=id).first()
+
+    @staticmethod
+    def update(id: str, **kwargs):
+        try:
+            order = Order.objects.get(id=id)
+        except Order.DoesNotExist:
+            raise NotFoundError()
+
+        update_fields = []
+        for key, value in kwargs.items():
+            if key in OrderService.UPDATABLE_FIELDS:
+                setattr(order, key, value)
+                update_fields.append(key)
+
+        order.save(update_fields=update_fields)
+        return order
 
     @staticmethod
     def delete(id: str):
