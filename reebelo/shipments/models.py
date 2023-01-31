@@ -21,7 +21,7 @@ class Shipment(TimestampedModel):
     order = models.OneToOneField(
         "orders.Order",
         on_delete=models.CASCADE,
-        related_name="order",
+        related_name="shipment",
         null=False,
         blank=False,
         help_text="Order associated with shipment",

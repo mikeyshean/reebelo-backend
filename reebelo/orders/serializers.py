@@ -9,8 +9,18 @@ class ProductSerializer(serializers.Serializer):
     price = serializers.DecimalField(max_digits=8, decimal_places=2)
 
 
+class TrackingCompanySerializer(serializers.Serializer):
+    name = serializers.CharField()
+
+
+class ShipmentSerializer(serializers.Serializer):
+    tracking_number = serializers.CharField()
+    tracking_company = TrackingCompanySerializer()
+
+
 class OrderSerializer(serializers.ModelSerializer):
     product = ProductSerializer()
+    shipment = ShipmentSerializer()
 
     class Meta:
         model = Order
@@ -21,6 +31,7 @@ class OrderSerializer(serializers.ModelSerializer):
             "quantity",
             "amount_per_unit",
             "amount_total",
+            "shipment",
         )
 
 

@@ -35,7 +35,13 @@ class OrderService:
 
     @staticmethod
     def list():
-        return Order.objects.all().select_related("product").order_by("-created")
+        return (
+            Order.objects.all()
+            .select_related("product")
+            .select_related("shipment")
+            .select_related("shipment__tracking_company")
+            .order_by("-created")
+        )
 
     @staticmethod
     def get_by_id(id: str) -> Optional[Order]:
