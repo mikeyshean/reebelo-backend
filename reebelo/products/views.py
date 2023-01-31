@@ -1,5 +1,8 @@
+from collections import namedtuple
+
 from rest_framework import status
 from rest_framework.exceptions import ValidationError
+from rest_framework.pagination import CursorPagination
 from rest_framework.response import Response
 from rest_framework.viewsets import ViewSet
 
@@ -13,10 +16,31 @@ from .serializers import (
 )
 from .service import ProductService
 
-ERROR_CODE_INSUFFICIENT_QUANTITY = "insufficient_quantity"
+Cursor = namedtuple("Cursor", ["offset", "reverse", "position"])
 
 
-class ProductViewSet(ViewSet):
+class CursorSetPagination(CursorPagination):
+    page_size = 50
+    page_size_query_param = "page_size"
+    ordering = "name"
+
+    def get_paginated_response(self, data):
+        next_cursor = self.get_next_link()
+
+        return Response(
+            {
+                "next": next_cursor,
+                "previous": self.get_previous_link(),
+                "next_cursor": next_cursor.split("cursor=")[1] if next_cursor else None,
+                "results": data,
+            }
+        )
+
+
+class ProductViewSet(CursorSetPagination, ViewSet):
+    pagination_class = CursorSetPagination
+    serializer_class = ProductSerializer
+
     def create(self, request):
         try:
             serializer = CreateProductSerializer(data=request.data)
@@ -37,9 +61,13 @@ class ProductViewSet(ViewSet):
             return Response(errors, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
 
     def list(self, request):
-        products = ProductService.list()
+        queryset = ProductService.list()
+        page = self.paginate_queryset(queryset=queryset, request=request)
+        if page is not None:
+            serializer = ProductSerializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
 
-        serializer = ProductSerializer(products, many=True)
+        serializer = ProductSerializer(queryset, many=True)
         return Response(serializer.data)
 
     def partial_update(self, request, pk=None):
